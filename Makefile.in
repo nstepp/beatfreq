@@ -1,0 +1,26 @@
+# Makefile for Windowed, dynamic, beat frequency counter
+
+CC=gcc
+CFLAGS=-O3 -Wall
+LIBS=-lfftw3 -lm -lggi
+
+PROGS=beatfreq
+OBJS=graphics.o main.o sound.o math.o window.o list.o
+LOCAL_DEFS=-DSIZEOF_FLOAT=@SIZEOF_FLOAT@ -DSIZEOF_DOUBLE=@SIZEOF_DOUBLE@
+
+.PHONY: all clean
+
+all: $(PROGS)
+
+clean:
+	rm -f *.o $(PROGS) core
+
+beatfreq: $(OBJS)
+	$(CC) $(CFLAGS) $(LIBS) $(OBJS) -o beatfreq
+
+ffttest: test.o
+	$(CC) $(CFLAGS) $(LIBS) test.o -o ffttest
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(LOCAL_DEFS) -c $<
+
